@@ -63,6 +63,7 @@ def demo(sess, net, image_name):
     # Load the demo image
     im_file = os.path.join(cfg.DATA_DIR, 'demo', image_name)
     #im_file = os.path.join('/home/corgi/Lab/label/pos_frame/ACCV/training/000001/',image_name)
+    # 使用OpenCVC读取图片
     im = cv2.imread(im_file)
 
     # Detect all object classes and regress object bounds
@@ -113,22 +114,26 @@ if __name__ == '__main__':
 
     if args.model == ' ':
         raise IOError(('Error: Model not found.\n'))
-        
+
+    print(args)
     # init session
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
     # load network
+    print("开始加载神经网络")
     net = get_network(args.demo_net)
     # load model
+    print("神经网络加载完成，开始加载模型数据")
     saver = tf.train.Saver(write_version=tf.train.SaverDef.V1)
     saver.restore(sess, args.model)
+    print("模型加载完成")
    
     #sess.run(tf.initialize_all_variables())
 
-    print '\n\nLoaded network {:s}'.format(args.model)
+    print('\n\nLoaded network {:s}'.format(args.model))
 
     # Warmup on a dummy image
     im = 128 * np.ones((300, 300, 3), dtype=np.uint8)
-    for i in xrange(2):
+    for i in range(2):
         _, _= im_detect(sess, net, im)
 
     im_names = ['000456.jpg', '000542.jpg', '001150.jpg',
