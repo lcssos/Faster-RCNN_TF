@@ -13,6 +13,11 @@ import math
 from rpn_msr.generate import imdb_proposals_det
 import tensorflow as tf
 from fast_rcnn.bbox_transform import clip_boxes, bbox_transform_inv
+
+
+import matplotlib as mpl
+mpl.use('TkAgg')
+
 import matplotlib.pyplot as plt
 from tensorflow.python.client import timeline
 import time

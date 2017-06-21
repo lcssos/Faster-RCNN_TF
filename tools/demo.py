@@ -1,9 +1,15 @@
+#coding=utf-8
+
 import _init_paths
 import tensorflow as tf
 from fast_rcnn.config import cfg
 from fast_rcnn.test import im_detect
 from fast_rcnn.nms_wrapper import nms
 from utils.timer import Timer
+
+import matplotlib as mpl
+mpl.use('TkAgg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os, sys, cv2
