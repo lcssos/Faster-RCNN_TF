@@ -91,8 +91,8 @@ The demo performs detection using a VGG16 network trained for detection on PASCA
 
 ### The result of testing on PASCAL VOC 2007 
 
-| Classes       | AP     |
-|-------------|--------|
+| Classes     | AP    |
+|-------------|-------|
 | aeroplane   | 0.698 |
 | bicycle     | 0.788 |
 | bird        | 0.657 |
@@ -113,7 +113,7 @@ The demo performs detection using a VGG16 network trained for detection on PASCA
 | sofa        | 0.650 |
 | train       | 0.766 |
 | tvmonitor   | 0.666 |
-| mAP        | 0.681 |
+| mAP         | 0.681 |
 
 
 ###References
