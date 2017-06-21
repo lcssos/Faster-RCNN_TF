@@ -3,6 +3,9 @@
 *.o
 faster_rcnn_models
 
+.DS_Store
 .idea
 *.ckpt
 VOCdevkit/
+VGG_imagenet.npy
+data/VOCdevkit2007
