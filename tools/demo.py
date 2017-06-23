@@ -123,7 +123,7 @@ if __name__ == '__main__':
     # init session
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
     # load network
-    print("开始加载神经网络")
+    print("开始加载神经网络:{}".format(args.demo_net))
     net = get_network(args.demo_net)
     # load model
     print("神经网络加载完成，开始加载模型数据")
@@ -137,6 +137,7 @@ if __name__ == '__main__':
 
     # Warmup on a dummy image
     im = 128 * np.ones((300, 300, 3), dtype=np.uint8)
+
     for i in range(2):
         _, _= im_detect(sess, net, im)
 
