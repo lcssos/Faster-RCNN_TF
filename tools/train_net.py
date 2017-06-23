@@ -92,14 +92,15 @@ if __name__ == '__main__':
     roidb = get_training_roidb(imdb)
 
     output_dir = get_output_dir(imdb, None)
-    print('Output will be saved to `{:s}`'.format(output_dir))
+    # print('Output will be saved to `{:s}`'.format(output_dir))
+    print("\n./tools/train_net.py 输出文件路径`{:s}`".format(output_dir))
 
     device_name = '/{}:{:d}'.format(args.device,args.device_id)
-    print device_name
+    # print device_name
+    print("\n ./tools/train_net.py  device_name:{}".format(device_name))
 
     network = get_network(args.network_name)
-    print 'Use network `{:s}` in training'.format(args.network_name)
+    # print 'Use network `{:s}` in training'.format(args.network_name)
+    print("\n ./tools/train_net.py 训练使用的神经网络 `{:s}`".format(args.network_name))
 
-    train_net(network, imdb, roidb, output_dir,
-              pretrained_model=args.pretrained_model,
-              max_iters=args.max_iters)
+    train_net(network, imdb, roidb, output_dir,pretrained_model=args.pretrained_model,max_iters=args.max_iters)

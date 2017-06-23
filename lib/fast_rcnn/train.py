@@ -204,7 +204,8 @@ def get_training_roidb(imdb):
         imdb.append_flipped_images()
         print('done')
 
-    print('Preparing training data...')
+    # print('Preparing training data...')
+    print("\n./lib/fast_rcnn/train.py 准备训练数据...")
     if cfg.TRAIN.HAS_RPN:
         if cfg.IS_MULTISCALE:
             gdl_roidb.prepare_roidb(imdb)
@@ -212,7 +213,8 @@ def get_training_roidb(imdb):
             rdl_roidb.prepare_roidb(imdb)
     else:
         rdl_roidb.prepare_roidb(imdb)
-    print 'done'
+    # print 'done'
+    print("准备完成！")
 
     return imdb.roidb
 

@@ -99,12 +99,12 @@ class imdb(object):
 
     def _get_widths(self):
       return [PIL.Image.open(self.image_path_at(i)).size[0]
-              for i in xrange(self.num_images)]
+              for i in range(self.num_images)]
 
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
-        for i in xrange(num_images):
+        for i in range(num_images):
             boxes = self.roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
             oldx2 = boxes[:, 2].copy()
@@ -146,7 +146,7 @@ class imdb(object):
         area_range = area_ranges[areas[area]]
         gt_overlaps = np.zeros(0)
         num_pos = 0
-        for i in xrange(self.num_images):
+        for i in range(self.num_images):
             # Checking for max_overlaps == 1 avoids including crowd annotations
             # (...pretty hacking :/)
             max_gt_overlaps = self.roidb[i]['gt_overlaps'].toarray().max(axis=1)
