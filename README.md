@@ -8,7 +8,7 @@ For details about R-CNN please refer to the paper [Faster R-CNN: Towards Real-Ti
 
 1. Requirements for Tensorflow (see: [Tensorflow](https://www.tensorflow.org/))
 
-2. Python packages you might not have: `cython`, `python-opencv`, `easydict`
+2. Python packages you might not have: `cython`, `opencv-python`, `easydict`
 
 ### Requirements: hardware
 
@@ -92,7 +92,7 @@ The demo performs detection using a VGG16 network trained for detection on PASCA
 ### The result of testing on PASCAL VOC 2007 
 
 | Classes     | AP    |
-|-------------|-------|
+|:----------- |:----- |
 | aeroplane   | 0.698 |
 | bicycle     | 0.788 |
 | bird        | 0.657 |

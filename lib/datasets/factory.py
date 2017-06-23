@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # --------------------------------------------------------
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
@@ -24,12 +27,13 @@ def _selective_search_IJCV_top_k(split, year, top_k):
     imdb.config['top_k'] = top_k
     return imdb
 
+print("./lib/datasets/factory.py 数据工厂初始化")
 # Set up voc_<year>_<split> using selective search "fast" mode
 for year in ['2007', '2012']:
     for split in ['train', 'val', 'trainval', 'test']:
         name = 'voc_{}_{}'.format(year, split)
-        __sets[name] = (lambda split=split, year=year:
-                datasets.pascal_voc(split, year))
+        print(name)
+        __sets[name] = (lambda split=split, year=year:datasets.pascal_voc(split, year))
 """
 # Set up voc_<year>_<split>_top_<k> using selective search "quality" mode
 # but only returning the first k boxes
@@ -42,12 +46,11 @@ for top_k in np.arange(1000, 11000, 1000):
 """
 
 # Set up voc_<year>_<split> using selective search "fast" mode
-for year in ['2007']:
-    for split in ['train', 'val', 'trainval', 'test']:
-        name = 'voc_{}_{}'.format(year, split)
-        print name
-        __sets[name] = (lambda split=split, year=year:
-                datasets.pascal_voc(split, year))
+# for year in ['2007']:
+#     for split in ['train', 'val', 'trainval', 'test']:
+#         name = 'voc_{}_{}'.format(year, split)
+#         print name
+#         __sets[name] = (lambda split=split, year=year:datasets.pascal_voc(split, year))
 
 # KITTI dataset
 for split in ['train', 'val', 'trainval', 'test']:
@@ -72,14 +75,15 @@ for year in ['2015']:
 for split in ['71', '370']:
     name = 'nthu_{}'.format(split)
     print name
-    __sets[name] = (lambda split=split:
-            datasets.nthu(split))
+    __sets[name] = (lambda split=split:datasets.nthu(split))
 
 
 def get_imdb(name):
     """Get an imdb (image database) by name."""
+    # print("get_imdb:{}".format(name))
     if not __sets.has_key(name):
         raise KeyError('Unknown dataset: {}'.format(name))
+    # print(__sets[name]())
     return __sets[name]()
 
 def list_imdbs():

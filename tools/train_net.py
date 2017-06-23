@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # --------------------------------------------------------
 # Fast R-CNN
@@ -25,6 +26,7 @@ def parse_args():
     Parse input arguments
     """
     parser = argparse.ArgumentParser(description='Train a Fast R-CNN network')
+    # 默认使用cpu进行训练，why？
     parser.add_argument('--device', dest='device', help='device to use',
                         default='cpu', type=str)
     parser.add_argument('--device_id', dest='device_id', help='device id to use',
@@ -35,18 +37,22 @@ def parse_args():
     parser.add_argument('--iters', dest='max_iters',
                         help='number of iterations to train',
                         default=70000, type=int)
+    # 预先训练的模型
     parser.add_argument('--weights', dest='pretrained_model',
                         help='initialize with pretrained model weights',
                         default=None, type=str)
+
     parser.add_argument('--cfg', dest='cfg_file',
                         help='optional config file',
                         default=None, type=str)
+    # 需要进行训练的数据集
     parser.add_argument('--imdb', dest='imdb_name',
                         help='dataset to train on',
                         default='kitti_train', type=str)
     parser.add_argument('--rand', dest='randomize',
                         help='randomize (do not use a fixed seed)',
                         action='store_true')
+    # VGGnet_train
     parser.add_argument('--network', dest='network_name',
                         help='name of the network',
                         default=None, type=str)
@@ -64,7 +70,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    print('Called with args:')
+    print('./tools/train_net.py 显示命令行参数:')
     print(args)
 
     if args.cfg_file is not None:
@@ -72,18 +78,21 @@ if __name__ == '__main__':
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs)
 
-    print('Using config:')
+    print('./tools/train_net.py 打印yaml配置文件')
     pprint.pprint(cfg)
 
     if not args.randomize:
         # fix the random seeds (numpy and caffe) for reproducibility
         np.random.seed(cfg.RNG_SEED)
+
+    print("./tools/train_net.py 开始加载训练数据集imdb：".format(args.imdb_name))
     imdb = get_imdb(args.imdb_name)
-    print 'Loaded dataset `{:s}` for training'.format(imdb.name)
+    # print('Loaded dataset `{:s}` for training'.format(imdb.name))
+    print("./tools/train_net.py 开始加载训练数据集roidb：")
     roidb = get_training_roidb(imdb)
 
     output_dir = get_output_dir(imdb, None)
-    print 'Output will be saved to `{:s}`'.format(output_dir)
+    print('Output will be saved to `{:s}`'.format(output_dir))
 
     device_name = '/{}:{:d}'.format(args.device,args.device_id)
     print device_name
