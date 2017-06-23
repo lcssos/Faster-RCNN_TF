@@ -26,11 +26,14 @@ import pdb
 
 class pascal_voc(imdb):
     def __init__(self, image_set, year, devkit_path=None):
+        print("\n./lib/datasets/pascal_voc.py 初始化pascal_voc")
         imdb.__init__(self, 'voc_' + year + '_' + image_set)
+
         self._year = year
         self._image_set = image_set
         self._devkit_path = self._get_default_path() if devkit_path is None \
                             else devkit_path
+
         self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
         self._classes = ('__background__', # always index 0
                          'aeroplane', 'bicycle', 'bird', 'boat',
@@ -48,21 +51,15 @@ class pascal_voc(imdb):
         self._comp_id = 'comp4'
 
         # PASCAL specific config options
-        self.config = {'cleanup'     : True,
-                       'use_salt'    : True,
-                       'use_diff'    : False,
-                       'matlab_eval' : False,
-                       'rpn_file'    : None,
-                       'min_size'    : 2}
+        self.config = {'cleanup': True, 'use_salt': True, 'use_diff': False, 'matlab_eval': False, 'rpn_file': None, 'min_size': 2}
 
         print("\n./lib/datasets/pascal_voc.py devkit路径 devkit_path:{:s}".format(self._devkit_path))
         print("\n./lib/datasets/pascal_voc.py 数据路径 data_path:{:s}".format(self._data_path))
         # print("self.num_classes:{}".format(self.num_classes))
 
-        assert os.path.exists(self._devkit_path), \
-                'VOCdevkit path does not exist: {}'.format(self._devkit_path)
-        assert os.path.exists(self._data_path), \
-                'Path does not exist: {}'.format(self._data_path)
+        assert os.path.exists(self._devkit_path), 'VOCdevkit path does not exist: {}'.format(self._devkit_path)
+        assert os.path.exists(self._data_path), 'Path does not exist: {}'.format(self._data_path)
+
 
     def image_path_at(self, i):
         """
@@ -86,10 +83,8 @@ class pascal_voc(imdb):
         """
         # Example path to image set file:
         # self._devkit_path + /VOCdevkit2007/VOC2007/ImageSets/Main/val.txt
-        image_set_file = os.path.join(self._data_path, 'ImageSets', 'Main',
-                                      self._image_set + '.txt')
-        assert os.path.exists(image_set_file), \
-                'Path does not exist: {}'.format(image_set_file)
+        image_set_file = os.path.join(self._data_path, 'ImageSets', 'Main', self._image_set + '.txt')
+        assert os.path.exists(image_set_file), 'Path does not exist: {}'.format(image_set_file)
         with open(image_set_file) as f:
             image_index = [x.strip() for x in f.readlines()]
         return image_index
@@ -110,14 +105,17 @@ class pascal_voc(imdb):
         if os.path.exists(cache_file):
             with open(cache_file, 'rb') as fid:
                 roidb = cPickle.load(fid)
-            print '{} gt roidb loaded from {}'.format(self.name, cache_file)
+            print('{} gt roidb loaded from {}'.format(self.name, cache_file))
             return roidb
 
         gt_roidb = [self._load_pascal_annotation(index)
                     for index in self.image_index]
+
         with open(cache_file, 'wb') as fid:
             cPickle.dump(gt_roidb, fid, cPickle.HIGHEST_PROTOCOL)
-        print 'wrote gt roidb to {}'.format(cache_file)
+
+        # print('wrote gt roidb to {}'.format(cache_file))
+        print("\n./lib/datasets/pascal_voc.py 将标注数据gt roidb写入文件：{}".format(cache_file))
 
         return gt_roidb
 
@@ -177,7 +175,7 @@ class pascal_voc(imdb):
         raw_data = sio.loadmat(filename)['boxes'].ravel()
 
         box_list = []
-        for i in xrange(raw_data.shape[0]):
+        for i in range(raw_data.shape[0]):
             boxes = raw_data[i][:, (1, 0, 3, 2)] - 1
             keep = ds_utils.unique_boxes(boxes)
             boxes = boxes[keep, :]
@@ -191,6 +189,7 @@ class pascal_voc(imdb):
         """
         Load image and bounding boxes info from XML file in the PASCAL VOC
         format.
+        读取xml中标记的内容
         """
         filename = os.path.join(self._data_path, 'Annotations', index + '.xml')
         tree = ET.parse(filename)
@@ -220,9 +219,13 @@ class pascal_voc(imdb):
             x2 = float(bbox.find('xmax').text) - 1
             y2 = float(bbox.find('ymax').text) - 1
             cls = self._class_to_ind[obj.find('name').text.lower().strip()]
+            # 一个图片中标记的多个物体的数组
             boxes[ix, :] = [x1, y1, x2, y2]
+            # 物体的分类号
             gt_classes[ix] = cls
+            # 重叠??
             overlaps[ix, cls] = 1.0
+            # 物体区域面积
             seg_areas[ix] = (x2 - x1 + 1) * (y2 - y1 + 1)
 
         overlaps = scipy.sparse.csr_matrix(overlaps)

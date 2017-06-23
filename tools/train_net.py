@@ -87,6 +87,7 @@ if __name__ == '__main__':
 
     print("\n./tools/train_net.py 开始加载训练数据集imdb：{}".format(args.imdb_name))
     imdb = get_imdb(args.imdb_name)
+    # print(imdb.roidb)
     # print('Loaded dataset `{:s}` for training'.format(imdb.name))
     print("./tools/train_net.py 开始加载训练数据集roidb：")
     roidb = get_training_roidb(imdb)

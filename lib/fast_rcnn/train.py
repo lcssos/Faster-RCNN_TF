@@ -39,8 +39,8 @@ class SolverWrapper(object):
         print('Computing bounding-box regression targets...')
         if cfg.TRAIN.BBOX_REG:
             self.bbox_means, self.bbox_stds = rdl_roidb.add_bbox_regression_targets(roidb)
-        # print('done')
-        print("\n./lib/fast_rcnn/train.py 计算bounding-box 完成")
+            # print('done')
+            print("\n./lib/fast_rcnn/train.py 计算bounding-box 完成")
 
         # For checkpoint
         self.saver = saver
@@ -149,16 +149,14 @@ class SolverWrapper(object):
 
         # optimizer and learning rate
         global_step = tf.Variable(0, trainable=False)
-        lr = tf.train.exponential_decay(cfg.TRAIN.LEARNING_RATE, global_step,
-                                        cfg.TRAIN.STEPSIZE, 0.1, staircase=True)
+        lr = tf.train.exponential_decay(cfg.TRAIN.LEARNING_RATE, global_step, cfg.TRAIN.STEPSIZE, 0.1, staircase=True)
         momentum = cfg.TRAIN.MOMENTUM
         train_op = tf.train.MomentumOptimizer(lr, momentum).minimize(loss, global_step=global_step)
 
         # iintialize variables
         sess.run(tf.global_variables_initializer())
         if self.pretrained_model is not None:
-            print(('Loading pretrained model '
-                   'weights from {:s}').format(self.pretrained_model))
+            print(('Loading pretrained model weights from {:s}').format(self.pretrained_model))
             self.net.load(self.pretrained_model, sess, self.saver, True)
 
         last_snapshot_iter = -1
@@ -233,6 +231,7 @@ def get_data_layer(roidb, num_classes):
         if cfg.IS_MULTISCALE:
             layer = GtDataLayer(roidb)
         else:
+            print("")
             layer = RoIDataLayer(roidb, num_classes)
     else:
         layer = RoIDataLayer(roidb, num_classes)
