@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # --------------------------------------------------------
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
@@ -35,7 +38,7 @@ class pascal_voc(imdb):
                          'cow', 'diningtable', 'dog', 'horse',
                          'motorbike', 'person', 'pottedplant',
                          'sheep', 'sofa', 'train', 'tvmonitor')
-        self._class_to_ind = dict(zip(self.classes, xrange(self.num_classes)))
+        self._class_to_ind = dict(zip(self.classes, range(self.num_classes)))
         self._image_ext = '.jpg'
         self._image_index = self._load_image_set_index()
         # Default to roidb handler
@@ -51,6 +54,10 @@ class pascal_voc(imdb):
                        'matlab_eval' : False,
                        'rpn_file'    : None,
                        'min_size'    : 2}
+
+        print("\n./lib/datasets/pascal_voc.py devkit路径 devkit_path:{:s}".format(self._devkit_path))
+        print("\n./lib/datasets/pascal_voc.py 数据路径 data_path:{:s}".format(self._data_path))
+        # print("self.num_classes:{}".format(self.num_classes))
 
         assert os.path.exists(self._devkit_path), \
                 'VOCdevkit path does not exist: {}'.format(self._devkit_path)

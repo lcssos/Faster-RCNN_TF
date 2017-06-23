@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # --------------------------------------------------------
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
@@ -101,10 +104,12 @@ class imdb(object):
       return [PIL.Image.open(self.image_path_at(i)).size[0]
               for i in range(self.num_images)]
 
+    # 通过水平对称算法将对称图像写入roidb？？？
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
         for i in range(num_images):
+            # print(self.roidb[i])
             boxes = self.roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
             oldx2 = boxes[:, 2].copy()

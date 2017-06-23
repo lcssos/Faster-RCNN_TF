@@ -23,7 +23,7 @@ def prepare_roidb(imdb):
     sizes = [PIL.Image.open(imdb.image_path_at(i)).size
              for i in xrange(imdb.num_images)]
     roidb = imdb.roidb
-    for i in xrange(len(imdb.image_index)):
+    for i in range(len(imdb.image_index)):
         roidb[i]['image'] = imdb.image_path_at(i)
         roidb[i]['width'] = sizes[i][0]
         roidb[i]['height'] = sizes[i][1]
@@ -51,7 +51,7 @@ def add_bbox_regression_targets(roidb):
     num_images = len(roidb)
     # Infer number of classes from the number of columns in gt_overlaps
     num_classes = roidb[0]['gt_overlaps'].shape[1]
-    for im_i in xrange(num_images):
+    for im_i in range(num_images):
         rois = roidb[im_i]['boxes']
         max_overlaps = roidb[im_i]['max_overlaps']
         max_classes = roidb[im_i]['max_classes']
@@ -83,12 +83,12 @@ def add_bbox_regression_targets(roidb):
         means = sums / class_counts
         stds = np.sqrt(squared_sums / class_counts - means ** 2)
 
-    print 'bbox target means:'
-    print means
-    print means[1:, :].mean(axis=0) # ignore bg class
-    print 'bbox target stdevs:'
-    print stds
-    print stds[1:, :].mean(axis=0) # ignore bg class
+    # print 'bbox target means:'
+    # print means
+    # print means[1:, :].mean(axis=0) # ignore bg class
+    # print 'bbox target stdevs:'
+    # print stds
+    # print stds[1:, :].mean(axis=0) # ignore bg class
 
     # Normalize targets
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS:

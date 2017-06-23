@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # --------------------------------------------------------
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
@@ -36,7 +39,8 @@ class SolverWrapper(object):
         print('Computing bounding-box regression targets...')
         if cfg.TRAIN.BBOX_REG:
             self.bbox_means, self.bbox_stds = rdl_roidb.add_bbox_regression_targets(roidb)
-        print('done')
+        # print('done')
+        print("\n./lib/fast_rcnn/train.py 计算bounding-box 完成")
 
         # For checkpoint
         self.saver = saver
@@ -102,6 +106,8 @@ class SolverWrapper(object):
 
     def train_model(self, sess, max_iters):
         """Network training loop."""
+        print("\n./lib/fast_rcnn/train.py 正在训练。。")
+        # print("self.imdb.num_classes:{}".format(self.imdb.num_classes))
 
         data_layer = get_data_layer(self.roidb, self.imdb.num_classes)
 
@@ -138,6 +144,7 @@ class SolverWrapper(object):
         loss_box = tf.reduce_mean(tf.reduce_sum(smooth_l1, reduction_indices=[1]))
 
         # final loss
+        # loss相加，计算总loss
         loss = cross_entropy + loss_box + rpn_cross_entropy + rpn_loss_box
 
         # optimizer and learning rate
@@ -161,8 +168,7 @@ class SolverWrapper(object):
             blobs = data_layer.forward()
 
             # Make one SGD update
-            feed_dict={self.net.data: blobs['data'], self.net.im_info: blobs['im_info'], self.net.keep_prob: 0.5, \
-                           self.net.gt_boxes: blobs['gt_boxes']}
+            feed_dict={self.net.data: blobs['data'], self.net.im_info: blobs['im_info'], self.net.keep_prob: 0.5, self.net.gt_boxes: blobs['gt_boxes']}
 
             run_options = None
             run_metadata = None
@@ -210,6 +216,7 @@ def get_training_roidb(imdb):
         if cfg.IS_MULTISCALE:
             gdl_roidb.prepare_roidb(imdb)
         else:
+            print("对roidb进行预处理")
             rdl_roidb.prepare_roidb(imdb)
     else:
         rdl_roidb.prepare_roidb(imdb)
@@ -221,6 +228,7 @@ def get_training_roidb(imdb):
 
 def get_data_layer(roidb, num_classes):
     """return a data layer."""
+    print("\n./lib/fast_rcnn/train.py 开始get_data_layer")
     if cfg.TRAIN.HAS_RPN:
         if cfg.IS_MULTISCALE:
             layer = GtDataLayer(roidb)
@@ -242,8 +250,7 @@ def filter_roidb(roidb):
         # find boxes with sufficient overlap
         fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
         # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) & (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
         # image is only valid if such boxes exist
         valid = len(fg_inds) > 0 or len(bg_inds) > 0
         return valid
@@ -257,10 +264,11 @@ def filter_roidb(roidb):
 
 def train_net(network, imdb, roidb, output_dir, pretrained_model=None, max_iters=40000):
     """Train a Fast R-CNN network."""
+    print("\n ./lib/fast_rcnn/train.py 开始进行训练...")
     roidb = filter_roidb(roidb)
     saver = tf.train.Saver(max_to_keep=100)
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         sw = SolverWrapper(sess, saver, network, imdb, roidb, output_dir, pretrained_model=pretrained_model)
-        print('Solving...')
+        # print('Solving...')
         sw.train_model(sess, max_iters)
-        print('done solving')
+        # print('done solving')

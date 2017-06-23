@@ -70,7 +70,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    print('./tools/train_net.py 显示命令行参数:')
+    print('\n./tools/train_net.py 显示命令行参数:')
     print(args)
 
     if args.cfg_file is not None:
@@ -78,14 +78,14 @@ if __name__ == '__main__':
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs)
 
-    print('./tools/train_net.py 打印yaml配置文件')
+    print('\n./tools/train_net.py 打印yaml配置文件')
     pprint.pprint(cfg)
 
     if not args.randomize:
         # fix the random seeds (numpy and caffe) for reproducibility
         np.random.seed(cfg.RNG_SEED)
 
-    print("./tools/train_net.py 开始加载训练数据集imdb：".format(args.imdb_name))
+    print("\n./tools/train_net.py 开始加载训练数据集imdb：{}".format(args.imdb_name))
     imdb = get_imdb(args.imdb_name)
     # print('Loaded dataset `{:s}` for training'.format(imdb.name))
     print("./tools/train_net.py 开始加载训练数据集roidb：")
@@ -97,10 +97,11 @@ if __name__ == '__main__':
 
     device_name = '/{}:{:d}'.format(args.device,args.device_id)
     # print device_name
-    print("\n ./tools/train_net.py  device_name:{}".format(device_name))
+    print("\n./tools/train_net.py  device_name:{}".format(device_name))
 
     network = get_network(args.network_name)
     # print 'Use network `{:s}` in training'.format(args.network_name)
-    print("\n ./tools/train_net.py 训练使用的神经网络 `{:s}`".format(args.network_name))
+    print("\n./tools/train_net.py 训练使用的神经网络 `{:s}`".format(args.network_name))
+    # print("imdb.num_classes:{}".format(imdb.num_classes))
 
     train_net(network, imdb, roidb, output_dir,pretrained_model=args.pretrained_model,max_iters=args.max_iters)
