@@ -7,6 +7,7 @@ faster_rcnn_models
 .idea
 *.ckpt
 *.npy
+*.tar
 VOCdevkit/
 data/VOCdevkit2007
 data/cache
