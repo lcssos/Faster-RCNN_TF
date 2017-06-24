@@ -1,6 +1,6 @@
 #coding=utf-8
 
-import _init_paths
+# import _init_paths
 import tensorflow as tf
 from fast_rcnn.config import cfg
 from fast_rcnn.test import im_detect
@@ -12,7 +12,7 @@ mpl.use('TkAgg')
 
 import matplotlib.pyplot as plt
 import numpy as np
-import os, sys, cv2
+import os, cv2
 import argparse
 from networks.factory import get_network
 
