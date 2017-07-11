@@ -50,13 +50,15 @@ LOG="experiments/logs/faster_rcnn_end2end_${NET}_${EXTRA_ARGS_SLUG}.txt.`date +'
 exec &> >(tee -a "$LOG")
 echo Logging output to "$LOG"
 
-echo "python ./tools/train_net.py --device ${DEV} --device_id ${DEV_ID} \
-  --weights data/pretrain_model/VGG_imagenet.npy \
-  --imdb ${TRAIN_IMDB} \
-  --iters ${ITERS} \
-  --cfg experiments/cfgs/faster_rcnn_end2end.yml \
-  --network VGGnet_train \
-  ${EXTRA_ARGS}"
+#echo "python ./tools/train_net.py --device ${DEV} --device_id ${DEV_ID} \
+#  --weights data/pretrain_model/VGG_imagenet.npy \
+#  --imdb ${TRAIN_IMDB} \
+#  --iters ${ITERS} \
+#  --cfg experiments/cfgs/faster_rcnn_end2end.yml \
+#  --network VGGnet_train \
+#  ${EXTRA_ARGS}"
+
+# python ./tools/train_net.py --device cpu --device_id 0 --weights data/pretrain_model/VGG_imagenet.npy --imdb voc_2007_trainval --iters 70000 --cfg experiments/cfgs/faster_rcnn_end2end.yml --network VGGnet_train
 
 time python ./tools/train_net.py --device ${DEV} --device_id ${DEV_ID} \
   --weights data/pretrain_model/VGG_imagenet.npy \
