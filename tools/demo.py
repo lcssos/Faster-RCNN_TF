@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
     # im_names = ['000456.jpg', '000542.jpg', '001150.jpg', '001763.jpg', '004545.jpg']
 
-    im_names = ["0d8f4158906512874c700fc97f1524bf.jpg","ddef497427b93be813d018aa70bb0c09.jpg"]
+    im_names = ["ddef497427b93be813d018aa70bb0c09.jpg"]
 
 
     for im_name in im_names:
