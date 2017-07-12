@@ -36,8 +36,9 @@ class SolverWrapper(object):
         self.output_dir = output_dir
         self.pretrained_model = pretrained_model
 
-        print('Computing bounding-box regression targets...')
         if cfg.TRAIN.BBOX_REG:
+            # print('Computing bounding-box regression targets...')
+            print('\n./lib/fast_rcnn/train.py 开始计算bounding-box')
             self.bbox_means, self.bbox_stds = rdl_roidb.add_bbox_regression_targets(roidb)
             # print('done')
             print("\n./lib/fast_rcnn/train.py 计算bounding-box 完成")

@@ -58,15 +58,16 @@ def add_bbox_regression_targets(roidb):
     assert len(roidb) > 0
     assert 'max_classes' in roidb[0], 'Did you call prepare_roidb first?'
 
+    # 训练图片的个数
     num_images = len(roidb)
     # Infer number of classes from the number of columns in gt_overlaps
+    # 分类个数
     num_classes = roidb[0]['gt_overlaps'].shape[1]
     for im_i in range(num_images):
         rois = roidb[im_i]['boxes']
         max_overlaps = roidb[im_i]['max_overlaps']
         max_classes = roidb[im_i]['max_classes']
-        roidb[im_i]['bbox_targets'] = \
-                _compute_targets(rois, max_overlaps, max_classes)
+        roidb[im_i]['bbox_targets'] = _compute_targets(rois, max_overlaps, max_classes)
 
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS_PRECOMPUTED:
         # Use fixed / precomputed "means" and "stds" instead of empirical values
