@@ -10,6 +10,9 @@
 
 """Train a Fast R-CNN network on a region of interest database."""
 
+# python ./tools/train_net.py --device cpu --device_id 0 --weights data/pretrain_model/VGG_imagenet.npy --imdb voc_2007_trainval --iters 70000 --cfg experiments/cfgs/faster_rcnn_end2end.yml --network VGGnet_train
+
+
 import _init_paths
 from fast_rcnn.train import get_training_roidb, train_net
 from fast_rcnn.config import cfg,cfg_from_file, cfg_from_list, get_output_dir
@@ -74,6 +77,7 @@ if __name__ == '__main__':
     print(args)
 
     if args.cfg_file is not None:
+        # 将cfg_file中的配置合并至 __C(cfg) 全局配置中
         cfg_from_file(args.cfg_file)
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs)
@@ -86,6 +90,7 @@ if __name__ == '__main__':
         np.random.seed(cfg.RNG_SEED)
 
     print("\n./tools/train_net.py 开始加载训练数据集imdb：{}".format(args.imdb_name))
+    # voc_2007_trainval
     imdb = get_imdb(args.imdb_name)
     # print(imdb.roidb)
     # print('Loaded dataset `{:s}` for training'.format(imdb.name))

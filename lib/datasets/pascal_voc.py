@@ -29,20 +29,27 @@ class pascal_voc(imdb):
         print("\n./lib/datasets/pascal_voc.py 初始化pascal_voc")
         imdb.__init__(self, 'voc_' + year + '_' + image_set)
 
+        # 2007
         self._year = year
+        # trainval
         self._image_set = image_set
+        # data/VOCdevlit2007 ???
         self._devkit_path = self._get_default_path() if devkit_path is None \
                             else devkit_path
-
+        # data/VOCdevlit2007/VOC2007 ???
         self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
+        # 分类数组
         self._classes = ('__background__', # always index 0
                          'aeroplane', 'bicycle', 'bird', 'boat',
                          'bottle', 'bus', 'car', 'cat', 'chair',
                          'cow', 'diningtable', 'dog', 'horse',
                          'motorbike', 'person', 'pottedplant',
                          'sheep', 'sofa', 'train', 'tvmonitor')
+        # 每个分类对应的序号的字典
+        # __background__ -> 0, aeroplane -> 1, bicycle -> 2, bird -> 3
         self._class_to_ind = dict(zip(self.classes, range(self.num_classes)))
         self._image_ext = '.jpg'
+        # 加载 ImageSets/Main 中指定的文件的数据
         self._image_index = self._load_image_set_index()
         # Default to roidb handler
         #self._roidb_handler = self.selective_search_roidb
@@ -53,8 +60,8 @@ class pascal_voc(imdb):
         # PASCAL specific config options
         self.config = {'cleanup': True, 'use_salt': True, 'use_diff': False, 'matlab_eval': False, 'rpn_file': None, 'min_size': 2}
 
-        print("\n./lib/datasets/pascal_voc.py devkit路径 devkit_path:{:s}".format(self._devkit_path))
-        print("\n./lib/datasets/pascal_voc.py 数据路径 data_path:{:s}".format(self._data_path))
+        # print("\n./lib/datasets/pascal_voc.py devkit路径 devkit_path:{:s}".format(self._devkit_path))
+        # print("\n./lib/datasets/pascal_voc.py 数据路径 data_path:{:s}".format(self._data_path))
         # print("self.num_classes:{}".format(self.num_classes))
 
         assert os.path.exists(self._devkit_path), 'VOCdevkit path does not exist: {}'.format(self._devkit_path)
@@ -190,9 +197,11 @@ class pascal_voc(imdb):
         Load image and bounding boxes info from XML file in the PASCAL VOC
         format.
         读取xml中标记的内容
+        data/VOCdevkit2007/VOC2007/Annotations
         """
         filename = os.path.join(self._data_path, 'Annotations', index + '.xml')
         tree = ET.parse(filename)
+        # 标记的物体
         objs = tree.findall('object')
         if not self.config['use_diff']:
             # Exclude the samples labeled as difficult
@@ -202,32 +211,41 @@ class pascal_voc(imdb):
             #     print 'Removed {} difficult objects'.format(
             #         len(objs) - len(non_diff_objs))
             objs = non_diff_objs
+        # 标记物体个数
         num_objs = len(objs)
 
+        # 物体矩形框坐标矩阵
         boxes = np.zeros((num_objs, 4), dtype=np.uint16)
+        # 物体名称矩阵
         gt_classes = np.zeros((num_objs), dtype=np.int32)
+        # 物体名称->分类 稀疏矩阵
         overlaps = np.zeros((num_objs, self.num_classes), dtype=np.float32)
         # "Seg" area for pascal is just the box area
+        # 物体面积矩阵
         seg_areas = np.zeros((num_objs), dtype=np.float32)
 
         # Load object bounding boxes into a data frame.
         for ix, obj in enumerate(objs):
             bbox = obj.find('bndbox')
             # Make pixel indexes 0-based
+            # 左上、右下两点坐标
             x1 = float(bbox.find('xmin').text) - 1
             y1 = float(bbox.find('ymin').text) - 1
             x2 = float(bbox.find('xmax').text) - 1
             y2 = float(bbox.find('ymax').text) - 1
+            # 获取物体分类号
             cls = self._class_to_ind[obj.find('name').text.lower().strip()]
             # 一个图片中标记的多个物体的数组
+            # 第ix个物体对应的两点坐标
             boxes[ix, :] = [x1, y1, x2, y2]
             # 物体的分类号
             gt_classes[ix] = cls
-            # 重叠??
+            # 稀疏矩阵，第ix个物体的第cls分类位置标记为1，其余为0
             overlaps[ix, cls] = 1.0
             # 物体区域面积
             seg_areas[ix] = (x2 - x1 + 1) * (y2 - y1 + 1)
 
+        # 稀疏矩阵压缩
         overlaps = scipy.sparse.csr_matrix(overlaps)
 
         return {'boxes' : boxes,

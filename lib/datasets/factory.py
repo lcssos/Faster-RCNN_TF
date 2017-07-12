@@ -28,11 +28,15 @@ def _selective_search_IJCV_top_k(split, year, top_k):
     return imdb
 
 print("./lib/datasets/factory.py 数据工厂初始化")
+# """ voc数据集 """
 # Set up voc_<year>_<split> using selective search "fast" mode
 for year in ['2007', '2012']:
     for split in ['train', 'val', 'trainval', 'test']:
         name = 'voc_{}_{}'.format(year, split)
-        print(name)
+        # print(name)
+        # name = 'voc_2007_train'
+        # name = 'voc_2007_val'
+        # name = 'voc_2007_trainval' ###
         __sets[name] = (lambda split=split, year=year:datasets.pascal_voc(split, year))
 """
 # Set up voc_<year>_<split>_top_<k> using selective search "quality" mode
@@ -60,12 +64,14 @@ for split in ['train', 'val', 'trainval', 'test']:
             datasets.kitti(split))
 
 # Set up coco_2014_<split>
+# coco2014数据集
 for year in ['2014']:
     for split in ['train', 'val', 'minival', 'valminusminival']:
         name = 'coco_{}_{}'.format(year, split)
         __sets[name] = (lambda split=split, year=year: coco(split, year))
 
 # Set up coco_2015_<split>
+# coco2015数据集
 for year in ['2015']:
     for split in ['test', 'test-dev']:
         name = 'coco_{}_{}'.format(year, split)
