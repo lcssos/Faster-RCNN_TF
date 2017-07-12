@@ -26,6 +26,7 @@ import pdb
 
 class pascal_voc(imdb):
     def __init__(self, image_set, year, devkit_path=None):
+        print ("-"*30)
         print("\n./lib/datasets/pascal_voc.py 初始化pascal_voc")
         imdb.__init__(self, 'voc_' + year + '_' + image_set)
 
@@ -49,7 +50,7 @@ class pascal_voc(imdb):
         # __background__ -> 0, aeroplane -> 1, bicycle -> 2, bird -> 3
         self._class_to_ind = dict(zip(self.classes, range(self.num_classes)))
         self._image_ext = '.jpg'
-        # 加载 ImageSets/Main 中指定的文件的数据
+        # 加载 ImageSets/Main 中指定的文件的数据 数组
         self._image_index = self._load_image_set_index()
         # Default to roidb handler
         #self._roidb_handler = self.selective_search_roidb
@@ -67,6 +68,7 @@ class pascal_voc(imdb):
         assert os.path.exists(self._devkit_path), 'VOCdevkit path does not exist: {}'.format(self._devkit_path)
         assert os.path.exists(self._data_path), 'Path does not exist: {}'.format(self._data_path)
 
+        print("\n./lib/datasets/pascal_voc.py 初始化完成")
 
     def image_path_at(self, i):
         """

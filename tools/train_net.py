@@ -91,10 +91,12 @@ if __name__ == '__main__':
 
     print("\n./tools/train_net.py 开始加载训练数据集imdb：{}".format(args.imdb_name))
     # voc_2007_trainval
+    # datasets/pascal_voc 加载训练集的Annotation
     imdb = get_imdb(args.imdb_name)
     # print(imdb.roidb)
     # print('Loaded dataset `{:s}` for training'.format(imdb.name))
-    print("./tools/train_net.py 开始加载训练数据集roidb：")
+    print("./tools/train_net.py 对roidb数据预处理，增加width,height等")
+    # roi_data_layer/roidb
     roidb = get_training_roidb(imdb)
 
     output_dir = get_output_dir(imdb, None)
@@ -103,8 +105,9 @@ if __name__ == '__main__':
 
     device_name = '/{}:{:d}'.format(args.device,args.device_id)
     # print device_name
-    print("\n./tools/train_net.py  device_name:{}".format(device_name))
+    print("\n./tools/train_net.py 设备名:{}".format(device_name))
 
+    #VGGnet_train
     network = get_network(args.network_name)
     # print 'Use network `{:s}` in training'.format(args.network_name)
     print("\n./tools/train_net.py 训练使用的神经网络 `{:s}`".format(args.network_name))

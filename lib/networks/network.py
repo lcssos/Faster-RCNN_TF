@@ -1,3 +1,4 @@
+# coding=utf-8
 import numpy as np
 import tensorflow as tf
 import roi_pooling_layer.roi_pooling_op as roi_pool_op
@@ -63,6 +64,7 @@ class Network(object):
         assert len(args)!=0
         self.inputs = []
         for layer in args:
+            # 判断实例是否是这个类或者object是变量
             if isinstance(layer, basestring):
                 try:
                     layer = self.layers[layer]
@@ -93,6 +95,20 @@ class Network(object):
 
     @layer
     def conv(self, input, k_h, k_w, c_o, s_h, s_w, name, relu=True, padding=DEFAULT_PADDING, group=1, trainable=True):
+        '''
+        :param input:
+        :param k_h: 卷积核高
+        :param k_w: 卷积核宽
+        :param c_o: 特征数
+        :param s_h: 滑动高
+        :param s_w: 滑动宽
+        :param name: 卷积名称
+        :param relu:   true
+        :param padding: SAME
+        :param group: 1
+        :param trainable: true
+        :return:
+        '''
         self.validate_padding(padding)
         c_i = input.get_shape()[-1]
         assert c_i%group==0
@@ -112,6 +128,7 @@ class Network(object):
                 kernel_groups = tf.split(3, group, kernel)
                 output_groups = [convolve(i, k) for i,k in zip(input_groups, kernel_groups)]
                 conv = tf.concat(3, output_groups)
+
             if relu:
                 bias = tf.nn.bias_add(conv, biases)
                 return tf.nn.relu(bias, name=scope.name)

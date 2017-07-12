@@ -1,3 +1,4 @@
+# coding=utf-8
 import tensorflow as tf
 from networks.network import Network
 
@@ -31,6 +32,8 @@ class VGGnet_train(Network):
             self.bbox_bias_assign = biases.assign(self.bbox_biases)
 
     def setup(self):
+        # feed('data')  将data添加至inputs数组
+        # .conv 进行一次卷积运算
         (self.feed('data')
              .conv(3, 3, 64, 1, 1, name='conv1_1', trainable=False)
              .conv(3, 3, 64, 1, 1, name='conv1_2', trainable=False)
@@ -49,6 +52,7 @@ class VGGnet_train(Network):
              .conv(3, 3, 512, 1, 1, name='conv5_1')
              .conv(3, 3, 512, 1, 1, name='conv5_2')
              .conv(3, 3, 512, 1, 1, name='conv5_3'))
+
         #========= RPN ============
         (self.feed('conv5_3')
              .conv(3,3,512,1,1,name='rpn_conv/3x3')

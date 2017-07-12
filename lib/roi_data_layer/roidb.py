@@ -1,3 +1,4 @@
+# coding=utf-8
 # --------------------------------------------------------
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
@@ -20,10 +21,15 @@ def prepare_roidb(imdb):
     each ground-truth box. The class with maximum overlap is also
     recorded.
     """
+    # 训练集图片size数组
     sizes = [PIL.Image.open(imdb.image_path_at(i)).size
              for i in xrange(imdb.num_images)]
+
+    # 对Annotation标注生成的对象
     roidb = imdb.roidb
+    # 开始对训练集图片进行循环遍历
     for i in range(len(imdb.image_index)):
+        # 第一个roidb {boxes:,gt_classes:,gt_overlaps:,flipped:,seg_areas}
         roidb[i]['image'] = imdb.image_path_at(i)
         roidb[i]['width'] = sizes[i][0]
         roidb[i]['height'] = sizes[i][1]
@@ -35,6 +41,10 @@ def prepare_roidb(imdb):
         max_classes = gt_overlaps.argmax(axis=1)
         roidb[i]['max_classes'] = max_classes
         roidb[i]['max_overlaps'] = max_overlaps
+        if i==2 :
+            print('-'*30)
+            print('roidb预处理')
+            print(roidb[i])
         # sanity checks
         # max overlap of 0 => class should be zero (background)
         zero_inds = np.where(max_overlaps == 0)[0]
