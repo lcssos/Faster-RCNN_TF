@@ -1,3 +1,4 @@
+# coding=utf-8
 # --------------------------------------------------------
 # Faster R-CNN
 # Copyright (c) 2015 Microsoft
@@ -15,13 +16,21 @@ from utils.cython_bbox import bbox_overlaps
 from fast_rcnn.bbox_transform import bbox_transform
 import pdb
 
-DEBUG = False
+DEBUG = True
 
+
+# gt_boxes [None, 5]
+# im_info [None, 3]
+# data [None, None, None, 3]
 def anchor_target_layer(rpn_cls_score, gt_boxes, im_info, data, _feat_stride = [16,], anchor_scales = [4 ,8, 16, 32]):
     """
     Assign anchors to ground-truth targets. Produces anchor classification
     labels and bounding-box regression targets.
     """
+
+    print('-'*30)
+    print('正在处理anchor_target_layer')
+    # 生成9个数组
     _anchors = generate_anchors(scales=np.array(anchor_scales))
     _num_anchors = _anchors.shape[0]
 
@@ -54,6 +63,10 @@ def anchor_target_layer(rpn_cls_score, gt_boxes, im_info, data, _feat_stride = [
     #   apply predicted bbox deltas at cell i to each of the 9 anchors
     # filter out-of-image anchors
     # measure GT overlap
+    print("rpn_cls_score.shape")
+    print(rpn_cls_score.shape)
+    print('im_info')
+    print(im_info)
 
     assert rpn_cls_score.shape[0] == 1, \
         'Only single item batches are supported'
@@ -76,6 +89,8 @@ def anchor_target_layer(rpn_cls_score, gt_boxes, im_info, data, _feat_stride = [
     shift_x, shift_y = np.meshgrid(shift_x, shift_y)
     shifts = np.vstack((shift_x.ravel(), shift_y.ravel(),
                         shift_x.ravel(), shift_y.ravel())).transpose()
+    print('shifts:')
+    # print(shifts)
     # add A anchors (1, A, 4) to
     # cell K shifts (K, 1, 4) to get
     # shift anchors (K, A, 4)

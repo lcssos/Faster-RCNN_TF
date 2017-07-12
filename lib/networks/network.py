@@ -13,6 +13,7 @@ DEFAULT_PADDING = 'SAME'
 
 def layer(op):
     def layer_decorated(self, *args, **kwargs):
+        # print('处理注解layer')
         # Automatically set a name if not provided.
         name = kwargs.setdefault('name', self.get_unique_name(op.__name__))
         # Figure out the layer inputs.
@@ -23,6 +24,7 @@ def layer(op):
         else:
             layer_input = list(self.inputs)
         # Perform the operation and get the output.
+        # print('开始真正执行注解标注的函数')
         layer_output = op(self, layer_input, *args, **kwargs)
         # Add to layer LUT.
         self.layers[name] = layer_output
@@ -181,8 +183,23 @@ class Network(object):
 
     @layer
     def anchor_target_layer(self, input, _feat_stride, anchor_scales, name):
+        '''
+        :param input: ['rpn_cls_score','gt_boxes','im_info','data']
+        :param _feat_stride: [16,]
+        :param anchor_scales: [8, 16, 32]
+        :param name: rpn-data
+        :return:
+        '''
+
+        print('正在执行anchor_target_layer')
         if isinstance(input[0], tuple):
             input[0] = input[0][0]
+
+        print('input:')
+        print(input[0].shape)
+        print(input[1])
+        print(input[2])
+        print(input[3])
 
         with tf.variable_scope(name) as scope:
 

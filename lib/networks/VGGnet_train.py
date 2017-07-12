@@ -11,6 +11,8 @@ anchor_scales = [8, 16, 32]
 
 class VGGnet_train(Network):
     def __init__(self, trainable=True):
+        print('-'*30)
+        print('正在初始化VGGnet_train')
         self.inputs = []
         self.data = tf.placeholder(tf.float32, shape=[None, None, None, 3])
         self.im_info = tf.placeholder(tf.float32, shape=[None, 3])
@@ -54,10 +56,14 @@ class VGGnet_train(Network):
              .conv(3, 3, 512, 1, 1, name='conv5_3'))
 
         #========= RPN ============
+        # 1.进行cls_score，使用1*1*18进行卷积
         (self.feed('conv5_3')
              .conv(3,3,512,1,1,name='rpn_conv/3x3')
              .conv(1,1,len(anchor_scales)*3*2 ,1 , 1, padding='VALID', relu = False, name='rpn_cls_score'))
 
+        # gt_boxes [None, 5]
+        # im_info [None, 3]
+        # data [None, None, None, 3]
         (self.feed('rpn_cls_score','gt_boxes','im_info','data')
              .anchor_target_layer(_feat_stride, anchor_scales, name = 'rpn-data' ))
 
