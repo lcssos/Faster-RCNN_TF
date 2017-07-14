@@ -150,7 +150,9 @@ class SolverWrapper(object):
 
         # optimizer and learning rate
         global_step = tf.Variable(0, trainable=False)
+        # cfg.TRAIN.STEPSIZE 50000
         lr = tf.train.exponential_decay(cfg.TRAIN.LEARNING_RATE, global_step, cfg.TRAIN.STEPSIZE, 0.1, staircase=True)
+        # 0.9
         momentum = cfg.TRAIN.MOMENTUM
         train_op = tf.train.MomentumOptimizer(lr, momentum).minimize(loss, global_step=global_step)
 

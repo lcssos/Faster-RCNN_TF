@@ -71,10 +71,12 @@ def add_bbox_regression_targets(roidb):
 
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS_PRECOMPUTED:
         # Use fixed / precomputed "means" and "stds" instead of empirical values
-        means = np.tile(
-                np.array(cfg.TRAIN.BBOX_NORMALIZE_MEANS), (num_classes, 1))
-        stds = np.tile(
-                np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS), (num_classes, 1))
+        # 使用固定 / 预先计算的 means 和 stds ，而不是经验值
+
+        # (0.0, 0.0, 0.0, 0.0)
+        means = np.tile(np.array(cfg.TRAIN.BBOX_NORMALIZE_MEANS), (num_classes, 1))
+        # (0.1, 0.1, 0.2, 0.2)
+        stds = np.tile(np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS), (num_classes, 1))
     else:
         # Compute values needed for means and stds
         # var(x) = E(x^2) - E(x)^2
@@ -103,15 +105,15 @@ def add_bbox_regression_targets(roidb):
 
     # Normalize targets
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS:
-        print "Normalizing targets"
-        for im_i in xrange(num_images):
+        print("Normalizing targets")
+        for im_i in range(num_images):
             targets = roidb[im_i]['bbox_targets']
-            for cls in xrange(1, num_classes):
+            for cls in range(1, num_classes):
                 cls_inds = np.where(targets[:, 0] == cls)[0]
                 roidb[im_i]['bbox_targets'][cls_inds, 1:] -= means[cls, :]
                 roidb[im_i]['bbox_targets'][cls_inds, 1:] /= stds[cls, :]
     else:
-        print "NOT normalizing targets"
+        print("NOT normalizing targets")
 
     # These values will be needed for making predictions
     # (the predicts will need to be unnormalized and uncentered)

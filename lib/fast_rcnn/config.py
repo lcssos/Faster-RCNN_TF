@@ -36,6 +36,7 @@ __C.TRAIN = edict()
 #__C.NET_NAME = 'VGGnet'
 # learning rate
 __C.TRAIN.LEARNING_RATE = 0.001
+
 __C.TRAIN.MOMENTUM = 0.9
 __C.TRAIN.GAMMA = 0.1
 __C.TRAIN.STEPSIZE = 50000
@@ -102,6 +103,7 @@ __C.TRAIN.SNAPSHOT_INFIX = ''
 __C.TRAIN.USE_PREFETCH = False
 
 # Normalize the targets (subtract empirical mean, divide by empirical stddev)
+# 规范目标（减去经验平均，除以实证标准差）
 __C.TRAIN.BBOX_NORMALIZE_TARGETS = True
 # Deprecated (inside weights)
 __C.TRAIN.BBOX_INSIDE_WEIGHTS = (1.0, 1.0, 1.0, 1.0)
